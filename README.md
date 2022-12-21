@@ -12,7 +12,7 @@ aws-lambda-python-collection
 ├── check-ping-from-lambda # Lambdaからの疎通を確認する
 │   ├── LambdaLayer.zip # LambdaLayer用zip
 │   ├── check-ping-from-lambda.py
-│   └── create_lambda_layer_for_python_requests.sh # LambdaLayer用zip作成スクリプト
+│   └── create_lambda_layer_for_python_requests.sh # LambdaLayer.zip作成スクリプト
 └── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
     └── ses-send-email-with-s3-attachment.py
 ```
