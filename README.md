@@ -9,6 +9,10 @@ AWS Lambdaで動作するPythonコード集
 ```bash
 aws-lambda-python-collection
 ├── README.md
+├── check-ping-from-lambda # Lambdaからの疎通を確認する
+│   ├── LambdaLayer.zip # LambdaLayer用zip
+│   ├── check-ping-from-lambda.py
+│   └── create_lambda_layer_for_python_requests.sh # LambdaLayer用zip作成スクリプト
 └── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
     └── ses-send-email-with-s3-attachment.py
 ```
@@ -23,8 +27,9 @@ Lambdaには、動作に必要な権限が付与されたIAMロールがアタ�
 
 # Usage
 ## ses-send-email-with-s3-attachment
+- Lambda関数を作成する。
 - SESに`検証済み ID`を設定する。`設定セット`を利用する場合は、`設定セット`を設定する。
-- `${添付ファイル名}`と一致するファイルを`${バケット名}`と一致するS3バケットに配置する。<br>
+- `${添付ファイル名}`と一致するファイルを`${バケット名}`と一致するS3バケットに配置する。
 - 以下の項目を設定する事。
 
 ```python
@@ -72,6 +77,21 @@ Lambdaには、動作に必要な権限が付与されたIAMロールがアタ�
     """
 
     """"""
+```
+
+<br>
+
+## check-ping-from-lambda
+- `create_lambda_layer_for_python_requests.sh`を実行する。<br>
+このスクリプトは`LambdaLayer.zip`を生成する。<br>
+RockyLinux9.1環境で動作確認済
+- AWS Lambdaのレイヤーを作成する。<br>
+生成した`LambdaLayer.zip`をアップロードする。
+- Lambda関数を作成する。
+- 以下の項目を設定する事。
+
+```python
+    response = requests.get('${IPアドレス, DNS, URL}') # 接続先を設定する(IPアドレス, DNS, または URL)
 ```
 
 <br>
