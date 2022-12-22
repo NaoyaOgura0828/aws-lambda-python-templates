@@ -69,8 +69,8 @@ SET_TIME_OUT = ${タイムアウトするまでの秒数}
 - `${添付ファイル名}`と一致するファイルを`${バケット名}`と一致するS3バケットに配置する。
 - 環境変数に以下の項目を設定する。
 
-**Note**
-`設定セット`を利用しない場合は、環境変数の`CONFIGURATION_SET_NAME`の値を空にする。
+> **Note**
+> `設定セット`を利用しない場合は、環境変数の`CONFIGURATION_SET_NAME`の値を空にする。
 
 <img src='images/ses-send-email-with-s3-attachment.png'>
 
