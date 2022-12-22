@@ -9,10 +9,15 @@ AWS Lambdaで動作するPythonコード集
 ```bash
 aws-lambda-python-collection
 ├── README.md
-├── check-ping-from-lambda # Lambdaからの疎通を確認する
+├── check-requests-from-lambda # LambdaからHTTPまたはHTTPSリクエストをする
 │   ├── LambdaLayer.zip # LambdaLayer用zip
-│   ├── check-ping-from-lambda.py
+│   ├── check-requests-from-lambda.py
 │   └── create_lambda_layer_for_python_requests.sh # LambdaLayer.zip作成スクリプト
+├── check-socket-from-lambda # Lambdaからの疎通を確認する
+│   └── check-socket-from-lambda.py
+├── images
+│   ├── check-requests-from-lambda.png # 環境変数イメージ
+│   └── check-socket-from-lambda.png # 環境変数イメージ
 └── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
     └── ses-send-email-with-s3-attachment.py
 ```
@@ -26,17 +31,20 @@ Lambdaには、動作に必要な権限が付与されたIAMロールがアタ�
 <br>
 
 # Usage
-## check-ping-from-lambda
+## check-requests-from-lambda
 - `create_lambda_layer_for_python_requests.sh`を実行する。<br>
 このスクリプトは`LambdaLayer.zip`を生成する。<br>
 RockyLinux9.1環境で動作確認済
 - AWS Lambdaのレイヤーを作成する。<br>
 生成した`LambdaLayer.zip`をアップロードする。
 - Lambda関数を作成する。
-- 以下の項目を設定する事。
+- 環境変数に以下の項目を設定する。
 
-```python
-    response = requests.get('${IPアドレス, DNS, URL}') # 接続先を設定する(IPアドレス, DNS, または URL)
+<img src='images/check-requests-from-lambda.png'>
+
+```conf
+HOST_DNS_OR_IP = ${HostのDNSまたはIP}
+SET_TIME_OUT = ${タイムアウトするまでの秒数}
 ```
 
 <br>
