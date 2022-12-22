@@ -17,7 +17,7 @@ aws-lambda-python-collection
 │   └── check-socket-from-lambda.py
 ├── images
 │   ├── check-requests-from-lambda.png # 環境変数イメージ
-│   └── check-socket-from-lambda.png # 環境変数イメージ
+│   ├── check-socket-from-lambda.png # 環境変数イメージ
 │   └── ses-send-email-with-s3-attachment.png # 環境変数イメージ
 └── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
     └── ses-send-email-with-s3-attachment.py
