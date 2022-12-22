@@ -1,45 +1,42 @@
 import os
-import boto3
-from botocore.exceptions import ClientError
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
+
+import boto3
+from botocore.exceptions import ClientError
 
 
 def lambda_handler(event, context):
-    """ 各種設定 """
 
-    # 送信元メールアドレス
-    sender = '送信元メールアドレス'
+    # 送信用メールアドレス
+    sender = os.environ['SENDER_EMAIL_ADDRESS']
 
-    # 送信先メールアドレス
-    recipient = '送信先メールアドレス'
+    # 受信用メールアドレス
+    receiver = os.environ['RECEIVER_EMAIL_ADDRESS']
 
     # ConfigurationSetの指定。
-    # ConfigurationSetを使用しない場合は、以下の変数と引数をコメントアウトする。。
-    # 変数: configuration_set = 'ConfigSet'
-    # 引数: ConfigurationSetName=configuration_set
-    # configuration_set = 'コンフィグセット'
+    configuration_set = os.environ['CONFIGURATION_SET_NAME']
 
-    # SES構築リージョン
-    aws_region = 'ap-northeast-1'
+    # リージョン
+    aws_region = os.environ['AWS_REGION']
 
     # Eメールの文字エンコーディング。
-    charset = 'utf-8'
+    charset = os.environ['CHARACTER_ENCODING']
 
     # S3バケット名
-    s3_bucket_name = 'バケット名'
+    s3_bucket_name = os.environ['S3_BUCKET_NAME']
 
     # 添付ファイル名
-    attachment_file_name = '添付ファイル名'
+    attachment_file_name = os.environ['ATTACHMENT_FILE_NAME']
 
-    # 添付ファイルを格納するLambda内のファイルパス
+    # 添付ファイルを格納するLambda内のファイルパス。
     attachment_file_path = '/tmp/' + attachment_file_name
 
     # メールの件名
     subject = '添付メールの実験'
 
-    # HTML以外のメールクライアントを持つ受信者のためのメール本文
+    # HTML以外のメールクライアントを持つ受信者のためのメール本文。
     body_text = '添付メールの実験,\r\n添付ファイルはありますか？'
 
     # メールのHTML本文
@@ -53,8 +50,6 @@ def lambda_handler(event, context):
     </html>
     """
 
-    """"""
-
     # 新しいSESリソースを作成し、地域を指定する。
     client = boto3.client('ses', region_name=aws_region)
 
@@ -63,7 +58,7 @@ def lambda_handler(event, context):
     # Add subject, from and to lines.
     message['Subject'] = subject
     message['From'] = sender
-    message['To'] = recipient
+    message['To'] = receiver
 
     # multipart/alternative の子コンテナを作成する。
     message_body = MIMEMultipart('alternative')
@@ -96,27 +91,44 @@ def lambda_handler(event, context):
 
     # 親コンテナに添付ファイルを追加する。
     message.attach(attachment_file)
-    # print(message)
-    try:
-        # メールを送信する
-        response = client.send_raw_email(
-            Source=sender,
-            Destinations=[
-                recipient
-            ],
-            RawMessage={
-                'Data': message.as_string(),
-            },
-            # ConfigurationSetName=configuration_set
-        )
-    # エラー処理
-    except ClientError as error:
-        print(error.response['Error']['Message'])
+    if not configuration_set:
+        # configuration_set の指定が無い場合
+        try:
+            # メールを送信する
+            response = client.send_raw_email(
+                Source=sender,
+                Destinations=[
+                    receiver
+                ],
+                RawMessage={
+                    'Data': message.as_string(),
+                },
+            )
+        # エラー処理
+        except ClientError as error:
+            print('メール送信に失敗しました')
+            print(error.response['Error']['Message'])
+        else:
+            print('メール送信成功！！ Message ID:'),
+            print(response['ResponseMetadata']['RequestId'])
     else:
-        print('Email sent! Message ID:'),
-        print(response['ResponseMetadata']['RequestId'])
-
-
-# main function
-if __name__ == '__main__':
-    lambda_handler({}, {})
+        # configuration_set の指定が有る場合
+        try:
+            # メールを送信する
+            response = client.send_raw_email(
+                Source=sender,
+                Destinations=[
+                    receiver
+                ],
+                RawMessage={
+                    'Data': message.as_string(),
+                },
+                ConfigurationSetName=configuration_set
+            )
+        # エラー処理
+        except ClientError as error:
+            print('メール送信に失敗しました')
+            print(error.response['Error']['Message'])
+        else:
+            print('メール送信成功！！ Message ID:'),
+            print(response['ResponseMetadata']['RequestId'])
