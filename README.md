@@ -41,6 +41,20 @@ RockyLinux9.1環境で動作確認済
 
 <br>
 
+## check-socket-from-lambda
+- Lambda関数を作成する。
+- 環境変数に以下の項目を設定する。
+
+<img src='images/check-socket-from-lambda.png'>
+
+```conf
+HOST_DNS_OR_IP = ${HostのDNSまたはIP}
+PORT = ${接続ポート}
+SET_TIME_OUT = ${タイムアウトするまでの秒数}
+```
+
+<br>
+
 ## ses-send-email-with-s3-attachment
 - Lambda関数を作成する。
 - SESに`検証済み ID`を設定する。`設定セット`を利用する場合は、`設定セット`を設定する。
