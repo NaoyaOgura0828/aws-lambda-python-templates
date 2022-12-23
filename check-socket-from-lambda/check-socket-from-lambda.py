@@ -34,8 +34,8 @@ def lambda_handler(event, context):
         sock.connect(address)
         sock.shutdown(socket.SHUT_RDWR)
         print("接続成功！！！")
-    except Exception as e:
+    except Exception as error:
         print("エラー")
-        print(e)
+        print(error)
     finally:
         sock.close()
