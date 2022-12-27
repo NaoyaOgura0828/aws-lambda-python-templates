@@ -21,11 +21,16 @@ aws-lambda-python-collection
 │   ├── ses-send-email-with-s3-attachment.png # 環境変数イメージ
 │   ├── sync-files-from-s3-to-ec2-on-linux_lambda_environment.png # 環境変数イメージ
 │   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_1.png # S3イベント通知設定
-│   └── sync-files-from-s3-to-ec2-on-linux_s3_event_2.png # S3イベント通知設定
+│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_2.png # S3イベント通知設定
+│   ├── sync-files-from-s3-to-ec2-on-windows_lambda_environment.png # 環境変数イメージ
+│   ├── sync-files-from-s3-to-ec2-on-windows_s3_event_1.png # S3イベント通知設定
+│   └── sync-files-from-s3-to-ec2-on-windows_s3_event_2.png # S3イベント通知設定
 ├── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
 │   └── ses-send-email-with-s3-attachment.py
-└── sync-files-from-s3-to-ec2-on-linux # S3に配置されたファイルをEC2(Linux)に同期する
-    └── sync-files-from-s3-to-ec2-on-linux.py
+├── sync-files-from-s3-to-ec2-on-linux # S3に配置されたファイルをEC2(Linux)に同期する
+│   └── sync-files-from-s3-to-ec2-on-linux.py
+└── sync-files-from-s3-to-ec2-on-windows # S3に配置されたファイルをEC2(Windows)に同期する
+    └── sync-files-from-s3-to-ec2-on-windows.py
 ```
 
 <br>
