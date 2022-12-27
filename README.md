@@ -31,8 +31,12 @@ aws-lambda-python-collection
 <br>
 
 # Requirement
-AWS Lambdaでの動作を前提とする。<br>
-Lambdaには、動作に必要な権限が付与されたIAMロールがアタッチされている事。
+- AWS Lambdaでの動作を前提とする。
+- Lambdaには、動作に必要な権限が付与されたIAMロールがアタッチされている事。
+- PythonでSSMを実行する場合は、実行先EC2に動作に必要な権限が付与されたIAMロール(InstanceProfile)がアタッチされている事。<br>
+また、実行先EC2では`SSM Agent`が実行中である事。
+    > **Note**<br>
+    > 実行先EC2がWindowsServerである場合はFirewallでブロックされていない事。
 
 <br>
 
@@ -112,10 +116,49 @@ TARGET_FILE_PATH = ${同期先フルファイルパス}
 
 - 同期元S3バケットの`イベント通知`を以下のとおり設定・作成する。
 
-イベント名は任意の名称。
+> **Note**<br>
+> イベント名は任意の名称。
+
 <img src='images/sync-files-from-s3-to-ec2-on-linux_s3_event_1.png'>
 
-作成したLambda関数を選択する。
+<br>
+
+> **Note**<br>
+> 作成したLambda関数を選択する。
+
 <img src='images/sync-files-from-s3-to-ec2-on-linux_s3_event_2.png'>
+
+<br>
+
+## sync-files-from-s3-to-ec2-on-windows
+- Lambda関数を作成する。
+- 環境変数に以下の項目を設定する。
+
+> **Note**<br>
+> S3バケット`/`ディレクトリを同期元とする場合は、`SOURCE_FILE_PATH`の値を空にする。
+
+<img src='images/sync-files-from-s3-to-ec2-on-windows_lambda_environment.png'>
+
+```conf
+INSTANCE_ID = ${同期先EC2インスタンスID}
+SOURCE_FILE_PATH = ${同期元S3バケットディレクトリ}
+TARGET_FILE_PATH = ${同期先フルファイルパス}
+```
+
+<br>
+
+- 同期元S3バケットの`イベント通知`を以下のとおり設定・作成する。
+
+> **Note**<br>
+> イベント名は任意の名称。
+
+<img src='images/sync-files-from-s3-to-ec2-on-windows_s3_event_1.png'>
+
+<br>
+
+> **Note**<br>
+> 作成したLambda関数を選択する。
+
+<img src='images/sync-files-from-s3-to-ec2-on-windows_s3_event_2.png'>
 
 <br>
