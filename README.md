@@ -18,9 +18,14 @@ aws-lambda-python-collection
 ├── images
 │   ├── check-requests-from-lambda.png # 環境変数イメージ
 │   ├── check-socket-from-lambda.png # 環境変数イメージ
-│   └── ses-send-email-with-s3-attachment.png # 環境変数イメージ
-└── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
-    └── ses-send-email-with-s3-attachment.py
+│   ├── ses-send-email-with-s3-attachment.png # 環境変数イメージ
+│   ├── sync-files-from-s3-to-ec2-on-linux_lambda_environment.png # 環境変数イメージ
+│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_1.png # S3イベント通知設定
+│   └── sync-files-from-s3-to-ec2-on-linux_s3_event_2.png # S3イベント通知設定
+├── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
+│   └── ses-send-email-with-s3-attachment.py
+└── sync-files-from-s3-to-ec2-on-linux # S3に配置されたファイルをEC2(Linux)に同期する
+    └── sync-files-from-s3-to-ec2-on-linux.py
 ```
 
 <br>
@@ -83,5 +88,34 @@ RECEIVER_EMAIL_ADDRESS = ${受信用メールアドレス}
 S3_BUCKET_NAME = ${S3バケット名}
 SENDER_EMAIL_ADDRESS = ${送信用メールアドレス}
 ```
+
+<br>
+
+## sync-files-from-s3-to-ec2-on-linux
+- Lambda関数を作成する。
+- 環境変数に以下の項目を設定する。
+
+> **Note**<br>
+> - 所有者, グループを変更しない場合は、環境変数の`LINUX_USER_AND_GROUP_NAME`の値を空にする。
+> - S3バケット`/`ディレクトリを同期元とする場合は、`SOURCE_FILE_PATH`の値を空にする。
+
+<img src='images/sync-files-from-s3-to-ec2-on-linux_lambda_environment.png'>
+
+```conf
+INSTANCE_ID = ${同期先EC2インスタンスID}
+LINUX_USER_AND_GROUP_NAME = ${同期先EC2ユーザー名}
+SOURCE_FILE_PATH = ${同期元S3バケットディレクトリ}
+TARGET_FILE_PATH = ${同期先フルファイルパス}
+```
+
+<br>
+
+- 同期元S3バケットの`イベント通知`を以下のとおり設定・作成する。
+
+イベント名は任意の名称。
+<img src='images/sync-files-from-s3-to-ec2-on-linux_s3_event_1.png'>
+
+作成したLambda関数を選択する。
+<img src='images/sync-files-from-s3-to-ec2-on-linux_s3_event_2.png'>
 
 <br>
