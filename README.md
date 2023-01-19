@@ -15,16 +15,29 @@ aws-lambda-python-collection
 │   └── create_lambda_layer_for_python_requests.sh # LambdaLayer.zip作成スクリプト
 ├── check-socket-from-lambda # Lambdaからの疎通を確認する
 │   └── check-socket-from-lambda.py
-├── images
-│   ├── check-requests-from-lambda.png # 環境変数イメージ
-│   ├── check-socket-from-lambda.png # 環境変数イメージ
-│   ├── ses-send-email-with-s3-attachment.png # 環境変数イメージ
-│   ├── sync-files-from-s3-to-ec2-on-linux_lambda_environment.png # 環境変数イメージ
-│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_1.png # S3イベント通知設定
-│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_2.png # S3イベント通知設定
-│   ├── sync-files-from-s3-to-ec2-on-windows_lambda_environment.png # 環境変数イメージ
-│   ├── sync-files-from-s3-to-ec2-on-windows_s3_event_1.png # S3イベント通知設定
-│   └── sync-files-from-s3-to-ec2-on-windows_s3_event_2.png # S3イベント通知設定
+├── crud-from-apigateway-to-dynamodb-by-http # API Gateway(HTTP API)からDynamoDBへCRUDする
+│   ├── API利用方法(HTTP).md
+│   └── crud-from-apigateway-to-dynamodb-by-http.py
+├── crud-from-apigateway-to-dynamodb-by-rest # API Gateway(REST API)からDynamoDBへCRUDする
+│   └── crud-from-apigateway-to-dynamodb-by-rest.py
+├── images # README.md用イメージ
+│   ├── check-requests-from-lambda_environment.png
+│   ├── check-socket-from-lambda_environment.png
+│   ├── crud-from-apigateway-to-dynamodb-by-http_architecture-diagrams.png
+│   ├── crud-from-apigateway-to-dynamodb-by-http_environment.png
+│   ├── crud-from-apigateway-to-dynamodb-by-http_integration-target.png
+│   ├── crud-from-apigateway-to-dynamodb-by-http_route-and-method.png
+│   ├── crud-from-apigateway-to-dynamodb-by-rest-by-rest_environment.png
+│   ├── crud-from-apigateway-to-dynamodb-by-rest_architecture-diagrams.png
+│   ├── crud-from-apigateway-to-dynamodb-by-rest_integration-request.png
+│   ├── crud-from-apigateway-to-dynamodb-by-rest_resource-and-method.png
+│   ├── ses-send-email-with-s3-attachment_environment.png
+│   ├── sync-files-from-s3-to-ec2-on-linux_lambda_environment.png
+│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_1.png
+│   ├── sync-files-from-s3-to-ec2-on-linux_s3_event_2.png
+│   ├── sync-files-from-s3-to-ec2-on-windows_lambda_environment.png
+│   ├── sync-files-from-s3-to-ec2-on-windows_s3_event_1.png
+│   └── sync-files-from-s3-to-ec2-on-windows_s3_event_2.png
 ├── ses-send-email-with-s3-attachment # SESでS3に配置されたファイルを添付送信する
 │   └── ses-send-email-with-s3-attachment.py
 ├── sync-files-from-s3-to-ec2-on-linux # S3に配置されたファイルをEC2(Linux)に同期する
@@ -55,7 +68,7 @@ RockyLinux9.1環境で動作確認済
 - Lambda関数を作成する。
 - 環境変数に以下の項目を設定する。
 
-<img src='images/check-requests-from-lambda.png'>
+<img src='images/check-requests-from-lambda_environment.png'>
 
 ```conf
 HOST_DNS_OR_IP = ${HostのDNSまたはIP}
@@ -68,12 +81,152 @@ SET_TIME_OUT = ${タイムアウトするまでの秒数}
 - Lambda関数を作成する。
 - 環境変数に以下の項目を設定する。
 
-<img src='images/check-socket-from-lambda.png'>
+<img src='images/check-socket-from-lambda_environment.png'>
 
 ```conf
 HOST_DNS_OR_IP = ${HostのDNSまたはIP}
 PORT = ${接続ポート}
 SET_TIME_OUT = ${タイムアウトするまでの秒数}
+```
+
+<br>
+
+## crud-from-apigateway-to-dynamodb-by-http
+以下のAWSアーキテクチャで動作する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-http_architecture-diagrams.png'>
+
+<br>
+
+### 構築方法
+- DynamoDBのパーティションキーを`id`に設定のうえ作成する。
+
+<br>
+
+- Lambda関数を作成する。
+- 環境変数に以下の項目を設定する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-http_environment.png'>
+
+```conf
+DYNAMODB_TABLE_NAME = ${DynamoDBのテーブル名}
+```
+
+<br>
+
+- API Gatewayを`HTTP API`のAPIタイプで作成する。
+- `ルート`と`メソッド`を以下のとおり作成する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-http_route-and-method.png'>
+
+```conf
+/items
+    PUT
+    GET
+    /{id}
+        DELETE
+        PUT
+        GET
+```
+
+- ルートの統合タイプは`Lambda 関数`を選択する。
+- 統合ターゲットの`Lambda 関数`に本Lambda関数を指定する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-http_integration-target.png'>
+
+<br>
+
+### 使用方法
+Bashにて以下のコマンドを入力し実行する。
+
+```bash
+# 登録
+# 登録Key名は任意で指定可能(idはパーティションキーの為必須)
+$ curl -X "PUT" -H "Content-Type: application/json" -d "{\"id\": \"${任意のid}\", \"name\": \"${氏名}\", \"age\": \"${年齢}\", \"corp\": \"${社名}\"}" ${API Gateway URL}/items
+
+# 更新
+# 登録Key名は任意で指定可能
+$ curl -X "PUT" -H "Content-Type: application/json" -d "{\"phone\": \"${電話番号}\", \"email\": \"${メールアドレス}\"}" ${API Gateway URL}/items/${更新対象id}
+
+# 削除
+$ curl -X "DELETE" ${API Gateway URL}/items/${削除対象id}
+
+# 全取得
+$ curl ${API Gateway URL}/items
+
+# 一致検索
+$ curl ${API Gateway URL}/items/${検索対象id}
+```
+
+<br>
+
+## crud-from-apigateway-to-dynamodb-by-rest
+以下のAWSアーキテクチャで動作する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-rest_architecture-diagrams.png'>
+
+<br>
+
+### 構築方法
+- DynamoDBのパーティションキーを`id`に設定のうえ作成する。
+
+<br>
+
+- Lambda関数を作成する。
+- 環境変数に以下の項目を設定する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-rest_environment.png'>
+
+```conf
+DYNAMODB_TABLE_NAME = ${DynamoDBのテーブル名}
+```
+
+<br>
+
+- API Gatewayを`REST API`のAPIタイプで作成する。
+- `リソース`と`メソッド`を以下のとおり作成する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-rest_resource-and-method.png'>
+
+```conf
+/
+    /items
+    GET
+    PUT
+        /{id}
+        DELETE
+        GET
+        PUT
+```
+
+- メソッドの統合タイプは`Lambda 関数`を選択する。
+- 統合リクエストの設定`Lambda プロキシ統合の使用`にチェックを入れる。
+- `Lambda 関数`に本Lambda関数を指定する。
+
+<img src='images/crud-from-apigateway-to-dynamodb-by-rest_integration-request.png'>
+
+<br>
+
+### 使用方法
+Bashにて以下のコマンドを入力し実行する。
+
+```bash
+# 登録
+# 登録Key名は任意で指定可能(idはパーティションキーの為必須)
+$ curl -X "PUT" -H "Content-Type: application/json" -d "{\"id\": \"${任意のid}\", \"name\": \"${氏名}\", \"age\": \"${年齢}\", \"corp\": \"${社名}\"}" ${API Gateway URL}/${ステージ名}/items
+
+# 更新
+# 登録Key名は任意で指定可能
+$ curl -X "PUT" -H "Content-Type: application/json" -d "{\"phone\": \"${電話番号}\", \"email\": \"${メールアドレス}\"}" ${API Gateway URL}/${ステージ名}/items/${更新対象id}
+
+# 削除
+$ curl -X "DELETE" ${API Gateway URL}/${ステージ名}/items/${削除対象id}
+
+# 全取得
+$ curl ${API Gateway URL}/${ステージ名}/items
+
+# 一致検索
+$ curl ${API Gateway URL}/${ステージ名}/items/${検索対象id}
 ```
 
 <br>
@@ -87,7 +240,7 @@ SET_TIME_OUT = ${タイムアウトするまでの秒数}
 > **Note**<br>
 > `設定セット`を利用しない場合は、環境変数の`CONFIGURATION_SET_NAME`の値を空にする。
 
-<img src='images/ses-send-email-with-s3-attachment.png'>
+<img src='images/ses-send-email-with-s3-attachment_environment.png'>
 
 ```conf
 ATTACHMENT_FILE_NAME = ${添付ファイル名}
