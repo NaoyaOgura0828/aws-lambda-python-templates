@@ -27,7 +27,7 @@ aws-lambda-python-collection
 │   ├── crud-from-apigateway-to-dynamodb-by-http_environment.png
 │   ├── crud-from-apigateway-to-dynamodb-by-http_integration-target.png
 │   ├── crud-from-apigateway-to-dynamodb-by-http_route-and-method.png
-│   ├── crud-from-apigateway-to-dynamodb-by-rest-by-rest_environment.png
+│   ├── crud-from-apigateway-to-dynamodb-by-rest_environment_environment.png
 │   ├── crud-from-apigateway-to-dynamodb-by-rest_architecture-diagrams.png
 │   ├── crud-from-apigateway-to-dynamodb-by-rest_integration-request.png
 │   ├── crud-from-apigateway-to-dynamodb-by-rest_resource-and-method.png
