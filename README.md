@@ -9,17 +9,23 @@ AWS Lambdaで動作するPythonコード集
 ```bash
 aws-lambda-python-collection
 ├── README.md
+├── change-number-of-ecs-tasks
+│   └── change-number-of-ecs-tasks.py # ECSのTask実行数を変更する
 ├── check-requests-from-lambda # LambdaからHTTPまたはHTTPSリクエストをする
 │   ├── LambdaLayer.zip # LambdaLayer用zip
 │   ├── check-requests-from-lambda.py
 │   └── create_lambda_layer_for_python_requests.sh # LambdaLayer.zip作成スクリプト
 ├── check-socket-from-lambda # Lambdaからの疎通を確認する
 │   └── check-socket-from-lambda.py
+├── create-and-put-file-to-s3
+│   └── create-and-put-file-to-s3.py # ファイルを作成しS3へ配置する
 ├── crud-from-apigateway-to-dynamodb-by-http # API Gateway(HTTP API)からDynamoDBへCRUDする
 │   ├── API利用方法(HTTP).md
 │   └── crud-from-apigateway-to-dynamodb-by-http.py
 ├── crud-from-apigateway-to-dynamodb-by-rest # API Gateway(REST API)からDynamoDBへCRUDする
 │   └── crud-from-apigateway-to-dynamodb-by-rest.py
+├── get-file-from-s3
+│   └── get-file-from-s3.py # S3からファイルを取得する
 ├── images # README.md用イメージ
 │   ├── check-requests-from-lambda_environment.png
 │   ├── check-socket-from-lambda_environment.png
@@ -59,6 +65,51 @@ aws-lambda-python-collection
 <br>
 
 # Usage
+## change-number-of-ecs-tasks
+- Lambda関数を作成する。
+- Lambdaへ以下のjsonパラメータを渡し、実行する。<br>
+    > **Note**<br>
+    > Lambdaテストに設定する。EventBridgeから定数を渡す等。
+
+```json
+# プロパティ
+[
+  {
+    "Cluster": ["${Cluster名}"],
+    "Service": ["${サービス名}", "${サービス名}", "${サービス名}", "${サービス名}"],
+    "DesiredCount": ${起動タスク数},
+    "MinCapacity": ${最小タスク数},
+    "MaxCapacity": ${最大タスク数}
+  }
+]
+
+
+# 例
+# ECSタスクを1台実行
+[
+  {
+    "Cluster": ["example-cluster"],
+    "Service": ["example-service1", "example-service2"],
+    "DesiredCount": 1,
+    "MinCapacity": 1,
+    "MaxCapacity": 1
+  }
+]
+
+# ECSタスクを停止
+[
+  {
+    "Cluster": ["example-cluster"],
+    "Service": ["example-service1", "example-service2"],
+    "DesiredCount": 0,
+    "MinCapacity": 0,
+    "MaxCapacity": 0
+  }
+]
+```
+
+<br>
+
 ## check-requests-from-lambda
 - `create_lambda_layer_for_python_requests.sh`を実行する。<br>
 このスクリプトは`LambdaLayer.zip`を生成する。<br>
