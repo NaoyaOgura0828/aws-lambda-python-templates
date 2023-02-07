@@ -38,4 +38,7 @@ pip3 install -t ./ requests
 cd ..
 zip -r LambdaLayer.zip python/
 
+# python ディレクトリ削除
+rm -drf python
+
 exit 0
