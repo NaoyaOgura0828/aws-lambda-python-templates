@@ -20,10 +20,15 @@ aws-lambda-python-collection
 ├── create-and-put-file-to-s3
 │   └── create-and-put-file-to-s3.py # ファイルを作成しS3へ配置する
 ├── crud-from-apigateway-to-dynamodb-by-http # API Gateway(HTTP API)からDynamoDBへCRUDする
-│   ├── API利用方法(HTTP).md
 │   └── crud-from-apigateway-to-dynamodb-by-http.py
 ├── crud-from-apigateway-to-dynamodb-by-rest # API Gateway(REST API)からDynamoDBへCRUDする
-│   └── crud-from-apigateway-to-dynamodb-by-rest.py
+│   ├── crud-from-apigateway-to-dynamodb-by-rest.py
+│   └── test # Test用json
+│       ├── crud-delete.json # 削除
+│       ├── crud-get-all.json # 全件取得
+│       ├── crud-register.json # 登録
+│       ├── crud-search.json # 一致検索
+│       └── crud-update.json # 更新
 ├── get-file-from-s3
 │   └── get-file-from-s3.py # S3からファイルを取得する
 ├── images # README.md用イメージ
