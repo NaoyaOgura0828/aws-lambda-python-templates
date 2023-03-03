@@ -1,0 +1,75 @@
+{
+    "resource": "/items/{id}",
+    "path": "/items/20",
+    "httpMethod": "GET",
+    "headers": {
+        "accept": "*/*",
+        "Host": "xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com",
+        "User-Agent": "curl/7.76.1",
+        "X-Amzn-Trace-Id": "Root=1-12345abc-1a2b34c56de789f012ghi3j4",
+        "X-Forwarded-For": "xxx.xxx.xxx.xxx",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "accept": [
+            "*/*"
+        ],
+        "Host": [
+            "xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com"
+        ],
+        "User-Agent": [
+            "curl/7.76.1"
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-12345abc-1a2b34c56de789f012ghi3j4"
+        ],
+        "X-Forwarded-For": [
+            "xxx.xxx.xxx.xxx"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "queryStringParameters": "None",
+    "multiValueQueryStringParameters": "None",
+    "pathParameters": {
+        "id": "20"
+    },
+    "stageVariables": "None",
+    "requestContext": {
+        "resourceId": "abcdef",
+        "resourcePath": "/items/{id}",
+        "httpMethod": "GET",
+        "extendedRequestId": "ABCDeFG1hiJKLMn=",
+        "requestTime": "03/Mar/2023:06:47:32 +0000",
+        "path": "/prod/items/20",
+        "accountId": "123456789123",
+        "protocol": "HTTP/1.1",
+        "stage": "prod",
+        "domainPrefix": "xxxxxxxxxx",
+        "requestTimeEpoch": 1677749706047,
+        "requestId": "012a345b-6789-0c12-def3-45gh678901i2",
+        "identity": {
+            "cognitoIdentityPoolId": "None",
+            "accountId": "None",
+            "cognitoIdentityId": "None",
+            "caller": "None",
+            "sourceIp": "xxx.xxx.xxx.xxx",
+            "principalOrgId": "None",
+            "accessKey": "None",
+            "cognitoAuthenticationType": "None",
+            "cognitoAuthenticationProvider": "None",
+            "userArn": "None",
+            "userAgent": "curl/7.76.1",
+            "user": "None"
+        },
+        "domainName": "xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com",
+        "apiId": "xxxxxxxxxx"
+    },
+    "body": "None",
+    "isBase64Encoded": "False"
+}
